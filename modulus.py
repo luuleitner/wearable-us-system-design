@@ -9,7 +9,7 @@ SOFTWARE STRUCTURE  (how this file is wired; the HARDWARE diagram is in config.y
                                     ▼
    System  ── builds one board object per config section ──┐
                                                             │
-   Acq(f_Tx, bits, nRx, PRF, D, mode, ...)  ── the knobs ──┤
+   Acq(f_Tx, bits, nRx, PRF, D, mode, nTx=None, ...) ─knobs─┤
                                                             ▼
                                        Run(system, acq)
                                          the per-configuration results, each one a
@@ -17,6 +17,7 @@ SOFTWARE STRUCTURE  (how this file is wired; the HARDWARE diagram is in config.y
                                             d.duty  d.fs  d.N  d.data_rate
                                             d.power  d.P_avg
                                             d.fits_onchip  d.fits_ble
+                                            d.within_tx_channels  d.within_rx_channels
                                             d.within_channels  d.within_depth
                                             d.axial_res_mm  d.fom
 
@@ -36,6 +37,7 @@ board's class — swap one by changing its class there. Transducer, Radio (BLE),
 Battery are modeled but are NOT ModulUS boards.
 """
 from pathlib import Path
+
 import numpy as np
 import yaml
 
@@ -62,10 +64,11 @@ N_CYCLES = _v(CFG["excitation"]["pulse_cycles"])          # default excitation p
 # ── Acq: the run-time knobs that define one acquisition ──────────────────────
 class Acq:
     def __init__(self, f_Tx, bits, nRx, PRF, D, mode, V_pp=15.0, n_cycles=N_CYCLES,
-                 duty_cycled=True, rx_window_s=None):
+                 duty_cycled=True, rx_window_s=None, nTx=None):
         self.f_Tx = f_Tx            # transducer centre frequency [Hz]
         self.bits = bits            # ADC resolution [bits]
-        self.nRx = nRx              # parallel Rx channels
+        self.nRx = nRx              # parallel Rx channels (receive path)
+        self.nTx = nRx if nTx is None else nTx   # firing channels; None -> mirror nRx
         self.PRF = PRF              # pulse repetition frequency [Hz]
         self.D = D                  # imaging depth [m]
         self.mode = mode            # 'RF' | 'BWR' | 'features'
@@ -74,6 +77,7 @@ class Acq:
         self.duty_cycled = duty_cycled  # disable duty-cycleable blocks between acquisitions?
         self.rx_window_s = rx_window_s  # RX-on time per pulse [s]; None -> echo window 2D/c
         assert mode in ("RF", "BWR", "features"), f"mode must be RF/BWR/features, got {mode!r}"
+        assert self.nTx >= 0 and self.nRx >= 0, "channel counts must be non-negative"
 
     @property
     def t_acq(self):
@@ -97,26 +101,28 @@ class Transducer:
         return n_cycles * lam / 2.0      # half the spatial pulse length [m]
 
     def transmit_power(self, acq):
-        # energy to charge/discharge the element each cycle, summed over active
+        # energy to charge/discharge the element each cycle, summed over the firing
         # channels: ~ C * Vpp^2 * n_cycles * PRF (a proportionality; this transmit
         # term is small next to the pulser chip power).
-        return acq.nRx * self.capacitance_f * acq.V_pp ** 2 * acq.n_cycles * acq.PRF
+        return acq.nTx * self.capacitance_f * acq.V_pp ** 2 * acq.n_cycles * acq.PRF
 
 
 # ── Pulse board — send the pulse ──────────────────────────────────────────
 class Pulser:
     """Pulse board: a generic multi-channel HV pulser + T/R switch. Models the
-    chip electronics only (per active channel); the transmit/load energy belongs
+    chip electronics only (per firing channel); the transmit/load energy belongs
     to the Transducer (see Transducer.transmit_power)."""
-    def __init__(self, channels_exposed=8, power_per_channel_w=0.1e-3):
-        self.channels_exposed = channels_exposed
+    def __init__(self, tx_channels_exposed=8, rx_channels_exposed=8,
+                 power_per_channel_w=0.1e-3):
+        self.tx_channels_exposed = tx_channels_exposed
+        self.rx_channels_exposed = rx_channels_exposed
         self.power_per_channel_w = power_per_channel_w
 
     def duty(self, acq):
         return min(acq.rx_window * acq.PRF, 1.0)   # on fraction = RX window x PRF
 
     def power(self, acq):
-        return acq.nRx * self.power_per_channel_w   # chip, per active channel
+        return acq.nTx * self.power_per_channel_w   # chip, per firing channel
 
 
 # ── AFE board — condition the echo ────────────────────────────────────────
@@ -234,8 +240,8 @@ class Run:
     """The model's results for one configuration: a System (the assembled boards)
     plus one Acq (the knobs). It follows the acquisition chain and exposes each
     stage as a property — the RX duty, the sampling rate fs and sample count N, the
-    link data_rate, each board's power and the total P_avg, the four feasibility
-    walls (on-chip ADC, BLE link, channel count, PRF-vs-depth), and the axial
+    link data_rate, each board's power and the total P_avg, the feasibility walls
+    (on-chip ADC, BLE link, Tx and Rx channel counts, PRF-vs-depth), and the axial
     resolution and mW/MHz figure of merit."""
     def __init__(self, system, acq):
         self.system = system
