@@ -81,12 +81,20 @@ transducer:
 #      │ pulser │──┬──►  transducer        (T/R routes Tx out / Rx in)
 #      │  + T/R │◄─┘   echo
 #      └────────┘
+#  The two channel counts below are the hardware ceilings; how many are actually
+#  used is set at run time by the nTx / nRx knobs on Acq (modulus.py).
 pulse:
   params:
-    channels_exposed:
+    tx_channels_exposed:
       value: 8
       unit: "channels"
-      description: "Channels exposed on the multi-channel HV pulser (8 of 32)."
+      description: "Transmit channels exposed on the multi-channel HV pulser (8 of 32); the ceiling on nTx, the channels that fire the pulse."
+      ref: "C. Leitner et al., 'ModulUS,' IEEE IUS, 2025, https://doi.org/10.1109/IUS62464.2025.11201551"
+      status: cited
+    rx_channels_exposed:
+      value: 8
+      unit: "channels"
+      description: "Receive channels routed back through the T/R switch to the AFE (8 of 32); the ceiling on nRx. Equal to the Tx count on ModulUS, where each exposed channel is bidirectional."
       ref: "C. Leitner et al., 'ModulUS,' IEEE IUS, 2025, https://doi.org/10.1109/IUS62464.2025.11201551"
       status: cited
     power_per_channel_w:
