@@ -7,18 +7,18 @@ authors:
   - family-names: "Leitner"
     given-names: "Christoph"
     affiliation: "ETH Zurich, Integrated Systems Laboratory (IIS)"
-    orcid: "https://orcid.org/0000-0002-7058-7236"   # <-- VERIFY: confirm this is your ORCID
+    orcid: "https://orcid.org/0000-0002-7058-7236"
   - family-names: "Giordano"
     given-names: "Marco"
     affiliation: "ETH Zurich, Integrated Systems Laboratory (IIS)"
-    orcid: "https://orcid.org/0000-0003-1106-3472"   # <-- VERIFY: confirm Marco's ORCID
+    orcid: "https://orcid.org/0000-0003-1106-3472"
 
-version: "1.0.0"
-date-released: "2026-06-26"
+version: "1.0.1"
+date-released: "2026-06-29"
 
 license: Apache-2.0
-repository-code: "https://github.com/luuleitner/anatomy-wearable-US-system"
-url: "https://github.com/luuleitner/anatomy-wearable-US-system"
+repository-code: "https://github.com/ModularUS/anatomy-wearable-US-system"
+url: "https://github.com/ModularUS/anatomy-wearable-US-system"
 
 abstract: >-
   Guided Colab exercises on wearable ultrasound system design. Compute how

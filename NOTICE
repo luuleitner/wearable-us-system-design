@@ -10,7 +10,7 @@ and demo data are licensed under the Creative Commons Attribution 4.0
 International License (CC BY 4.0; see LICENSE-CONTENT).
 
 This work builds on, and imports, the dasIT toolbox
-(https://github.com/luuleitner/dasIT), also licensed under Apache-2.0.
+(https://github.com/ModularUS/dasIT), also licensed under Apache-2.0.
 
 The ModulUS system parameters reproduced in config.yaml are sourced from the
 peer-reviewed publication and the cited datasheets noted inline; that paper

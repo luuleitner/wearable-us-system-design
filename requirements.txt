@@ -16,4 +16,4 @@ jupyterlab>=4.0
 
 # --- external toolbox (auto-installed on Colab; install by hand for local dev) ---
 # dasIT — signal helpers (fftsignal, analytic_signal, envelope); not on PyPI:
-#   pip install git+https://github.com/luuleitner/dasIT
+#   pip install git+https://github.com/ModularUS/dasIT

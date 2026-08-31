@@ -11,7 +11,7 @@ notebook generated (not hand-edited JSON) gives clean diffs and one source.
 import nbformat as nbf
 from pathlib import Path
 
-SLUG = "luuleitner/anatomy-wearable-US-system"   # GitHub slug (Colab mirror)
+SLUG = "ModularUS/anatomy-wearable-US-system"   # GitHub slug (Colab mirror)
 NB_NAME = "wearable_us_student.ipynb"            # student version (TODO blanks)
 NB_TEACHER = "wearable_us_teacher.ipynb"         # instructor version (blanks filled)
 RAW = f"https://raw.githubusercontent.com/{SLUG}/main"   # raw base for assets/ images
@@ -73,7 +73,7 @@ if IN_COLAB:
         print("dasIT: already available, skipping install")
     except ImportError:
         print("dasIT: not found — installing from GitHub...")
-        !pip install -q --force-reinstall --no-deps git+https://github.com/luuleitner/dasIT
+        !pip install -q --force-reinstall --no-deps git+https://github.com/ModularUS/dasIT
         from dasIT.features import signal as _dasIT_probe  # noqa: F401  # fail loudly if still broken
         print("dasIT: installed OK")
     # our sandbox repo: clone so you can browse modulus.py and the demo data.
@@ -107,7 +107,7 @@ This notebook stands on two pieces, both pulled in by the bootstrap above:
 
 | what | role here | link |
 |---|---|---|
-| **dasIT** | signal toolbox — spectra, analytic signal, envelope (`fftsignal`, `analytic_signal`, `envelope`) | [github.com/luuleitner/dasIT](https://github.com/luuleitner/dasIT) |
+| **dasIT** | signal toolbox — spectra, analytic signal, envelope (`fftsignal`, `analytic_signal`, `envelope`) | [github.com/ModularUS/dasIT](https://github.com/ModularUS/dasIT) |
 | **ModulUS sandbox** (this repo) | the system digital-twin you design against — `System`, `Acq`, `modulus.py`, and the demo echo in `example_data/` | [github.com/{SLUG}](https://github.com/{SLUG}) |
 
 Everything runs on Colab as-is — nothing to install by hand. The full method is in the ModulUS paper (see **References** at the end).

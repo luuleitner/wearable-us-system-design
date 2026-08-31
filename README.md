@@ -1,7 +1,7 @@
 # Anatomy of a Wearable Ultrasound System
 ### From Components to Signals
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/luuleitner/anatomy-wearable-US-system/blob/main/wearable_us_student.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ModularUS/anatomy-wearable-US-system/blob/main/wearable_us_student.ipynb)
 [![Code DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21023566.svg)](https://doi.org/10.5281/zenodo.21023566)
 [![Slides DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21030966.svg)](https://doi.org/10.5281/zenodo.21030966)
 
@@ -31,7 +31,7 @@ Locally:
 
 ```
 pip install -r requirements.txt
-pip install git+https://github.com/luuleitner/dasIT   # signal helpers
+pip install git+https://github.com/ModularUS/dasIT   # signal helpers
 jupyter lab wearable_us_student.ipynb
 ```
 
@@ -53,7 +53,7 @@ The workshop lecture deck is archived separately on Zenodo (CC BY 4.0):
 
 If `example_data/modulus_demo.npz` is absent, the notebook loads a clearly-labeled
 synthetic echo so it still runs. The notebook imports the
-[dasIT](https://github.com/luuleitner/dasIT) toolbox for the signal-domain helpers.
+[dasIT](https://github.com/ModularUS/dasIT) toolbox for the signal-domain helpers.
 
 ## License
 
@@ -64,7 +64,7 @@ Dual-licensed by component:
 | Code (`*.py`, `config.yaml`, notebook code cells) | Apache-2.0 | [`LICENSE`](LICENSE) |
 | Content (notebook text, figures, slides, demo data, teaching materials) | CC BY 4.0 | [`LICENSE-CONTENT`](LICENSE-CONTENT) |
 
-Apache-2.0 matches the imported [dasIT](https://github.com/luuleitner/dasIT) toolbox and
+Apache-2.0 matches the imported [dasIT](https://github.com/ModularUS/dasIT) toolbox and
 carries an explicit patent grant. CC BY 4.0 lets others reuse and adapt the teaching
 materials, including commercially, with attribution.
 
